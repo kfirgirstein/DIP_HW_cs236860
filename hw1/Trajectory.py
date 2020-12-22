@@ -14,6 +14,14 @@ class Trajectories:
             raise FileNotFoundError("")
         self.x_vals = mat['X']
         self.y_vals = mat['Y']
+        
+    def __len__(self):
+        return len(self.x_vals)
+    
+    def __iter__(self):
+        for x in self.x_vals:
+            for y in self.y_vals:
+                yield (x,y)
 
     # returns an x,y points for a trajecory of a given index.
     def get_trajectory(self,index):
@@ -28,20 +36,20 @@ class Trajectories:
         ax1.plot(x, y)
         fig.tight_layout()
         plt.show()
-        
+    
+    def generate_psf(self,x,y,kernel_size):
+        psf = np.zeros((kernel_size, kernel_size))
+        center = kernel_size // 2
+        for i in range(len(x)):
+            psf[center - round(y[i]), center + round(x[i])] += 1
+        return psf
+
     # Generates PSF according to given index of trajectory.
-    def generate_kernel(self,index, kernel_size = 13,zfactor = 1,show = False):
+    def generate_kernel(self,index, kernel_size = 20 ,plotshow = False):
         x, y = self.get_trajectory(index)
-        center_shift = (kernel_size-1)/2
-        kernel = np.zeros((kernel_size,kernel_size),int)
-
-        for k in range(len(x)):
-            kernel_row = int(round(center_shift+x[k]*zfactor))
-            kernel_col = int(round(center_shift-y[k]*zfactor))
-            if kernel_col<kernel_size and kernel_row<kernel_size:
-                kernel[kernel_col, kernel_row] = kernel[kernel_col, kernel_row] + 1
-
-        if show == True:
+        kernel = self.generate_psf(x, y,kernel_size)
+        
+        if plotshow == True:
             plt.imshow(kernel, cmap='gray')
             plt.show()
             
