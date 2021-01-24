@@ -5,6 +5,8 @@ from matplotlib import image as mpimg
 from scipy import signal
 from scipy import fftpack
 import scipy.io
+import os
+
 
 class Blur:
     def __init__(self,trajectories,image):
@@ -25,6 +27,30 @@ class Blur:
         for i in range(len(self.trajectories)):
             self.blurred_images.append(image.apply_filter(self.psfs[i]))
 
+    def save_psfs(self,out_path):
+        if not os.path.exists(out_path):
+            os.makedirs(out_path)
+        for i in range(len(self.psfs)):
+            cur_path = f"{out_path}/{i+1}.jpg"
+            if(os.path.isfile(cur_path)):
+                continue 
+            plt.clf()
+            plt.imshow(self.psfs[i], cmap='gray')
+            plt.savefig(cur_path)
+            
+    def save_blurred_images(self,out_path):
+        
+        if not os.path.exists(out_path):
+            os.makedirs(out_path)
+        for i in range(len(self.blurred_images)):
+            cur_path = f"{out_path}/{i+1}.jpg"
+            if(os.path.isfile(cur_path)):
+                continue 
+            plt.clf()
+            plt.imshow(self.blurred_images[i], cmap='gray')
+            plt.savefig(cur_path)
+            
+            
     def plot_blured_batch(self,batch):
         for i in range(batch):
             x,y = self.trajectories.get_trajectory(i)

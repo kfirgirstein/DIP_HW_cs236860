@@ -18,7 +18,7 @@ class ImageWrapper:
         return self.image
 
     def apply_filter(self,image_filter,show = False):
-        filtered = scipy.signal.convolve2d(self.image_arr,image_filter)
+        filtered = scipy.signal.convolve2d(self.image_arr,image_filter,mode = 'same', boundary = 'wrap')
 
         if show == True:
             plt.imshow(filtered, cmap='gray')
