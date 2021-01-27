@@ -13,8 +13,8 @@ class KernelEsimator:
     def __init__(self,image,alpha):
         self.base_image = image
         self.alpha = alpha
-        self.high_resolution_image =  self.downsample_image(image)
-        self.low_resolution_image = self.upsample_image(image)
+        self.high_resolution_image = self.upsample_image(image)
+        self.low_resolution_image =   self.downsample_image(image) 
         
     def downsample_image(self,image):
         (mat_shape_x, mat_shape_y) = image.shape

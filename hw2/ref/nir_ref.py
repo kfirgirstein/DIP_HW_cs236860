@@ -259,10 +259,10 @@ def calculate_kernel(blurred_img, alpha, T):
                     continue
                 R_squared = Rj[j].T @ Rj[j]
 
-                sum_left += neighbors_weights[i, j] * (R_squared) + (C_squared)
+                sum_left += neighbors_weights[i, j] * (R_squared)
                 sum_right += neighbors_weights[i, j] * Rj[j].T @ q_patches_vec[i]
 
-        curr_k = np.linalg.inv((1 / (sigma_NN ** 2)) * sum_left + epsilon_mat) @ sum_right
+        curr_k = np.linalg.inv((1 / (sigma_NN ** 2)) * sum_left +  (C_squared)) @ sum_right
         curr_k_reshaped = curr_k.reshape((patch_size, patch_size))
     return curr_k_reshaped  ## as matrix in shape patch_size ** 2
 
