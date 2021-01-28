@@ -17,20 +17,22 @@ class KernelEsimator:
         self.low_resolution_image =   self.downsample_image(image) 
         
     def downsample_image(self,image):
-        (mat_shape_x, mat_shape_y) = image.shape
-        new_size =(int(mat_shape_x / self.alpha), int(mat_shape_y / self.alpha))
-        downsampled = np.zeros(new_size)
-        for i in range(new_size[0]):
-            for j in range(new_size[1]):
-                downsampled[i, j] = image[self.alpha * i, self.alpha * j]
+                
+        width = int(image.shape[1] //self.alpha)
+        height = int(image.shape[0] //self.alpha)
+        dim = (width, height)
+        downsampled = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
+        
         return downsampled
 
     def upsample_image(self,image):
-        (mat_shape_x, mat_shape_y) = image.shape
-        new_size = (int(mat_shape_y * self.alpha), int(mat_shape_x * self.alpha))
-        upsampled_filtered_image = cv2.resize(image, dsize=new_size, interpolation=cv2.INTER_CUBIC)
-        return upsampled_filtered_image
-    
+        
+        width = int(image.shape[1] * self.alpha)
+        height = int(image.shape[0] * self.alpha)
+        dim = (width, height)
+        resized = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
+        return resized
+
         
     def esimator_kernel(self,initial_k,**hp):
         

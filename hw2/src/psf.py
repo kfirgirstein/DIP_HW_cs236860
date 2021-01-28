@@ -12,11 +12,9 @@ class PSFManager:
         if choice == 'sinc':
             return self.__sinc__(**kwargs)
         elif choice == 'gaussian':
-            return self.__gaussian__(**kwargs)
+            return self.__gaussian_kernel__(**kwargs)
         elif choice == 'box':
             return self.__box__(**kwargs)
-        elif choice == 'gaussian_kernel':
-            return self.__gaussian_kernel__(**kwargs)
         else: 
             raise Exception(f"invalid name {name}")
     
@@ -28,23 +26,13 @@ class PSFManager:
         return (psf_image,psnr)
     
         
-    def __sinc__(self,window_size, filter_range):
-        #x = np.linspace(- filter_range,  filter_range, window_size)
-        #xx = np.outer(x, x)
+    def __sinc__(self,window_size):
         edge = window_size // 2
         x = np.linspace(-edge, edge, num=window_size)
         xx = np.outer(x, x)
         s = np.sinc(xx)
         s = s / s.sum()
         return s
-
-    def __gaussian__(self,window_size,  filter_range, mu, sigma):
-        z = np.linspace(- filter_range,  filter_range, window_size)
-        x, y = np.meshgrid(z, z)
-        d = np.sqrt(x*x+y*y)
-        g = np.exp(-((d-mu)**2 / (2.0 * sigma**2)))
-        g = g / g.sum()
-        return g
 
     def __box__(self,width,height,box_size):
         h_ = int(height / 2)

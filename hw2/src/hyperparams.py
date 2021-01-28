@@ -1,15 +1,15 @@
 r"""
 Use this module to write hyper parameters in the notebook.
 """
-window_size = 15
+SIZE = 256
 
 def sinc_hp():
-    return dict(window_size=256,filter_range=window_size//4)
-
+    window_size = SIZE
+    return dict(window_size=window_size)
 
 def gaussian_hp():
-    filter_range,mu,sigma = window_size//16,0,1
-    return dict(window_size=window_size,filter_range=filter_range,mu=mu, sigma=sigma)
+    size,sigma =SIZE,1
+    return dict(size=size,std=sigma)
 
 def esimator_hp():
     iterations,patch_size,reduced_patch_size,num_neighbors,sigma = 5,5,10,10,0.3
